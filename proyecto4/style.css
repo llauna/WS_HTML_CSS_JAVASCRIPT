@@ -1,0 +1,130 @@
+#notas {
+    display: contents;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#notas nav {
+    display: block;
+    position: fixed;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+#notas nav ul {
+    display: contents;
+}
+
+#notas nav ul li {
+    display: none;
+    width: 35px;
+    height: 35px;
+    background-size: contain;
+    cursor: pointer;
+}
+
+#notas.visible nav ul li {
+    display: block;
+    filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.5));  
+}
+
+#notas nav ul li:first-of-type {
+    display: block;
+    opacity: 0.5;
+    transition: filter 0.5s, opacity 0.5s;
+    filter: grayscale(80%) drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.5));
+}
+
+#notas nav ul li:first-of-type:hover {
+    display: block;
+    filter: grayscale(20%)  drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.5));
+    opacity: 0.9;
+}
+
+#notas.visible nav ul li:first-of-type {
+    filter:  drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.5));
+    opacity: 1;
+}
+
+#activar{
+    background-image: url('./imagenes/nota.png');
+}
+
+#papelera{
+    background-image: url('./imagenes/papelera.png');
+}
+
+#notas ol {
+    display: none;
+}
+
+#notas.visible ol {
+    display: contents;
+}
+
+#notas ol li::before {
+    background: linear-gradient(135deg,  #fcf4b0 0%,#f1da36 100%); 
+    clip-path: polygon(100% 0, 100% calc( 100% - 25px ), calc( 100% - 25px ) 100%, 0 100%, 0 0);
+    content: '';
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    top: 0em;
+    left: 0em;
+}
+
+#notas ol li {
+    display: block;
+    position: fixed;
+    z-index: 999;
+    padding: 1em;
+    padding-bottom: 2.5em;
+    cursor: pointer;
+    filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.5));
+}
+
+#notas ol li::after {
+    content: '';
+    display: block;
+    right: 0;
+    bottom: 0;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    position: absolute;
+    background-color: #f7eb85;
+    filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.5));
+    clip-path: polygon(100% 0, 100% calc( 100% - 25px ), calc( 100% - 25px ) 100%, 0 100%, 0 0);
+}
+
+#notas ol li::target-text:after {
+    content: '';
+    display: block;
+    right: 0;
+    bottom: 0;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    position: absolute;
+    background-color: #e8d84b;
+    box-shadow: 0px -1px 1em 0px #0000008c;
+    border: solid 1px #bc9f0d73;
+}
+
+#notas ol li textarea {
+    background-color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    border: none !important;
+    outline:0 none !important;
+    field-sizing: content;
+
+}
+
+#notas ol li textarea:focus {
+    color: #008;
+}

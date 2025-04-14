@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mi Aplicación</title>
+        <link rel="stylesheet" href="./style.css">
+        <script src="./scripts/script-toast.js" language="javascript"></script>
+        <script src="./scripts/script-login.js" language="javascript"></script>
+    </head>
+    <body>
+        <header>
+            <h1>App DracMagic</h1>
+            <div id="user-info">
+                <img alt="Foto de menchu" src="./imagenes/student_II.jpg" >
+                Menchu
+                <button onClick="toogleLogout()"> Salir </button>
+            </div>
+            <div id="confirm-logout">
+                ¿Estas seguro?
+                <button onClick="toogleLogout()"> No</button>
+                <button onClick="logout()"> Si, quiero salir</button>
+            </div>
+            <nav>
+                <ol>
+                    <li><a href="#">Crear nuevo algo</a></li>
+                    <li><a href="#">Buscar algos</a></li>
+                    <li><a href="#">Preferencias</a></li>
+                </ol>
+            </nav>
+            
+            <aside>
+                <div id="warnings">
+                    <h2>Avisos</h2>
+                    <ul>
+                        <li>Está previsto un mantenimiento de la app el martes 13 de diciembre a de 12:00 a 14:00</li>
+                        <li>Está previsto un mantenimiento de la app el martes 13 de diciembre a de 12:00 a 14:00</li>
+                    </ul>
+                </div>
+
+                <div id="news">
+                    <h2>Novedades</h2>
+                    <ul>
+                        <li>Novedades 1</li>
+                        <li>Novedades 2</li>
+                    </ul>
+                </div>
+
+                <div id="tutorials">
+                    <h2>Video-tutoriales</h2>
+                    <ul>
+                        <li>Tutoriales 1</li>
+                        <li>Tutoriales 2</li>
+                    </ul>
+                </div>
+            </aside>
+        </header>
+        <main>
+            <button onClick="showToast('Soy el titulo', 'Soy el mensaje', 'error', 10000, saluda );">SACAR NUEVO TOAST</button>
+            <button onClick="showToast('Soy el titulo', 'Soy el mensaje', 'info', 5000);">SACAR NUEVO TOAST</button>
+
+            <template id="toast-template">
+                <div class="toast">
+                    <div class="progress-bar"></div>
+                    <h3>TITULO</h3>
+                    <p>TEXTO</p>
+                </div>
+            </template>
+        </main>
+        
+        <aside>Contenido auxiliar</aside>
+
+        <footer>Contenido del footer</footer>
+        
+        <script>
+            function saluda(){
+                alert('Hola');
+            }
+        </script>
+    </body>
+</html>

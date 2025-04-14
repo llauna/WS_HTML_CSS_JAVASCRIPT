@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>App Notas</title>
+        <link rel="stylesheet" href="./style.css">
+        <script src="./script.js"></script>
+    </head>
+    <body>
+        <main>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo accusamus animi doloribus doloremque. Sequi amet ipsam cumque hic culpa. Id sit porro nam fugit ratione dicta itaque ex reiciendis nostrum.</p>
+        </main>
+        <aside id="notas">
+            <nav style="top: 100px; left: 100px;">
+                <ul>
+                    <li id="activar"></li>
+                    <li id="papelera"></li>
+                </ul>
+            </nav>
+            <ol>
+                <li id="nota1" draggable="true" style="top: 100px; left: 400px; width: 300px;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia ab ut ad illo placeat odit, deleniti consectetur facere a ipsa voluptatibus natus praesentium eligendi nostrum esse culpa. Eum, vero labore.</li>
+                <li id="nota2" draggable="true" style="top: 200px; left: 100px; width: 350px;" class="editable">
+                    <textarea>Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi reiciendis natus eius officia delectus nisi ex, consectetur incidunt perspiciatis labore? Perferendis minima soluta placeat! Sapiente impedit asperiores hic explicabo rerum?</textarea>
+                </li>
+                <li id="nota3" draggable="true" style="top: 300px; left: 300px; width: 200px;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo harum dolor, ex obcaecati tenetur ab unde quod natus reprehenderit quam cumque vel, eveniet ullam optio culpa commodi adipisci similique! Totam.</li>
+                <li id="nota4" draggable="true" style="top: 500px; left: 50px; width: 400px;">Lorem ipsum dolor sit amet consectetur, adipisicing elit. At suscipit cumque quaerat, aliquam beatae aut reiciendis quae eaque officia, incidunt doloribus, alias quam excepturi accusamus. Laborum aperiam iusto sapiente asperiores.</li>
+            </ol>
+        </aside>
+        <script>
+            agregarListeners();
+        </script>
+    </body>
+</html>

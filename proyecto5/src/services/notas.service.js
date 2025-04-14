@@ -1,0 +1,152 @@
+import { Nota } from "../models/nota.js";
+import { repositorioDeNotasEnUso } from "../repository/notas.repository.js";
+import { ColoresDeNotas } from "../models/colores.js";
+import { mostrarOverlay } from '../../overlay.js';
+
+export const ValoresPorDefecto = Object.freeze({
+    ancho : 300,
+    color: ColoresDeNotas.amarillo,
+    texto: "Escribe aqui tu nota.....",
+});
+
+export const EventosDelServicioDeNotas = Object.freeze({
+    notasCargadas: 'notasCargadas',
+    notaCreada: 'notaCreada',
+    notaEliminada: 'notaEliminada',
+    notaRestaurada: 'notaRestaurada',
+    notaModificada: 'notaModificada',
+    papeleraVaciada: 'papeleraVaciada',
+});
+
+// define logica de negocio
+
+class NotasService {
+    constructor() {
+        this.listeners = new Map();
+        document.addEventListener("visibilitychange", 
+            () => {
+                if (document.visibilityState === "visible") {
+                    if (repositorioDeNotasEnUso.recargarNotas) {
+                        repositorioDeNotasEnUso.recargarNotas();
+                        this.notificar(EventosDelServicioDeNotas.notasCargadas, repositorioDeNotasEnUso.getNotas());                       
+                    } 
+                }
+            }
+        );
+    }
+
+    async inicializar() {
+        if(repositorioDeNotasEnUso.recargarNotas) {
+            const promesaDeCarga = repositorioDeNotasEnUso.recargarNotas();
+            const funcionCierreOverlayNormal = mostrarOverlayCargando(promesaDeCarga);
+            promesaDeCarga.then (
+                () => this.notificar(EventosDelServicioDeNotas.notasCargadas, repositorioDeNotasEnUso.getNotas())
+            ).catch(
+                () => {
+                    funcionCierreOverlayNormal();
+                    const funcionCierre = mostrarOverlayError(promesaDeCarga)
+                    setTimeout(() => {
+                        funcionCierre()
+                        this.inicializar()
+                    }, 5000);
+
+                }
+            )
+        }
+    }
+
+    crearNuevaNota(texto = ValoresPorDefecto.texto, color = ValoresPorDefecto.color) {
+        const x = ( document.documentElement.clientWidth - ValoresPorDefecto.ancho) /2;
+        const y = ( document.documentElement.clientHeight - 100) / 2;
+        const posicion = { x, y}
+        const nuevaNota = new Nota (
+                                texto,
+                                posicion,
+                                ValoresPorDefecto.ancho,
+                                color
+                            );
+        const nuevaNotaConId = repositorioDeNotasEnUso.addNota(nuevaNota);
+        this.notificar(EventosDelServicioDeNotas.notaCreada, nuevaNotaConId);
+        return nuevaNotaConId;
+    }
+    obtenerNotas() {
+        return repositorioDeNotasEnUso.getNotas();
+    }
+    eliminarNota(id) {
+        repositorioDeNotasEnUso.deleteNota(id);
+        this.notificar(EventosDelServicioDeNotas.notaEliminada, id);
+    }
+    vaciarPapeleraReciclaje(id) {
+        repositorioDeNotasEnUso.emptyPapeleraReciclaje();
+        this.notificar(EventosDelServicioDeNotas.papeleraVaciada);
+    }
+    restaurarNota(id) {
+        repositorioDeNotasEnUso.emptyPapeleraReciclaje();
+        this.modificarColorDeLaNota(EventosDelServicioDeNotas.papeleraVaciada);
+    }
+    modificarElTextoDeLaNota(id, texto) {
+        const nota = repositorioDeNotasEnUso.getNotaById(id);
+        nota.texto = texto;
+        repositorioDeNotasEnUso.updateNota(nota);
+        this.notificar(EventosDelServicioDeNotas.notaModificada, nota);
+    }
+    modificarUbicacionDeLaNota(id, posicion) {
+        const nota = repositorioDeNotasEnUso.getNotaById(id);
+        nota.posicion = posicion;
+        repositorioDeNotasEnUso.updateNota(nota);
+        this.notificar(EventosDelServicioDeNotas.notaModificada, nota);
+    }
+    modificarColorDeLaNota(id, color) {
+        const nota = repositorioDeNotasEnUso.getNotaById(id);
+        nota.color = color;
+        repositorioDeNotasEnUso.updateNota(nota);
+        this.notificar(EventosDelServicioDeNotas.notaModificada, nota);
+    }
+    addEventListener(evento, callback) {
+        if (!this.listeners.has(evento)) {
+            this.listeners.set(evento, []);            
+        }
+        this.listeners.get(evento).push(callback);
+    }
+    notificar(evento, datos) {
+        if (this.listeners.has(evento)) {
+           this.listeners.get(evento).forEach(callback => callback(datos));   
+        }
+    }
+}
+
+function mostrarOverlayCargando(promesa){}
+
+function mostrarOverlayError( promesa ){
+    return mostrarOverlay(
+        {
+            titulo: {
+                texto: 'Error al cargar las notas',
+                caracteristicas: {
+                    velocidad: 20,
+                    cursor: '',
+                    estiloTexto: 'titulo-overlay',
+                },
+            }, 
+            mensaje: {
+                texto: 'Lo reintentaremos en unos segundos',
+                caracteristicas: {
+                    velocidad: 120,
+                    cursor: '_',
+                    velocidadParpadeoCursor: 300,
+                    estiloTexto: 'texto-overlay',
+                    estiloCursor: 'texto-overlay',
+                    ocultarCursorAlFinalizar: false
+                },
+            },
+            fondo: {
+                color: '#ff5555dd',
+                imagen: 'overlay.jpg',
+                transparencia: 0.2,
+            }
+        },
+        promesa
+    );
+}
+
+export const notasService = new NotasService();
